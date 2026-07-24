@@ -1,0 +1,3285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combined Interview Pack | SMNV Trainer</title>
+<style>
+:root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --text: #111827;
+    --muted: #667085;
+    --line: #d7dde6;
+    --primary: #176b87;
+    --primary-hover: #12576e;
+    --ink: #1f2937;
+    --red: #dc2626;
+    --green: #16a34a;
+    --shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="dark"] {
+    --bg: #111418;
+    --panel: #1b2028;
+    --text: #edf2f7;
+    --muted: #a2adbd;
+    --line: #303846;
+    --primary: #2aa8c8;
+    --primary-hover: #46b8d3;
+    --ink: #e5e7eb;
+    --red: #f87171;
+    --green: #4ade80;
+    --shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+    width: min(980px, 100%);
+    margin: 0 auto;
+    padding: 18px;
+}
+
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.compact-toolbar {
+    justify-content: flex-end;
+    margin: 0 0 12px;
+}
+
+.small-btn,
+.icon-btn {
+    min-height: 42px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.small-btn {
+    padding: 0 12px;
+    font-weight: 700;
+}
+
+.icon-btn {
+    width: 42px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+}
+
+.layout {
+    display: block;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 8px 0 14px;
+}
+
+.segmented {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 8px;
+}
+
+.segmented button {
+    min-height: 36px;
+    border-radius: 6px;
+    padding: 0 12px;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 750;
+}
+
+.segmented button.active {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.status-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 10px;
+}
+
+.section-picker {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.section-toggle {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+    font-weight: 800;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.section-toggle-arrow {
+    color: var(--muted);
+    transition: transform 0.18s ease;
+}
+
+.section-toggle[aria-expanded="true"] .section-toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.section-nav {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 25;
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.section-nav[hidden] {
+    display: none;
+}
+
+.section-btn {
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 750;
+    text-align: left;
+}
+
+.section-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--panel);
+}
+
+.card-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.nav-btn {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+    font-weight: 850;
+}
+
+.nav-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--panel);
+}
+
+.nav-btn::after {
+    content: "";
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+}
+
+.nav-btn.mark-red::after {
+    background: var(--red);
+}
+
+.nav-btn.mark-green::after {
+    background: var(--green);
+}
+
+.flashcard {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: clamp(22px, 4vw, 42px);
+}
+
+.category {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+}
+
+.term {
+    min-height: 116px;
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: clamp(18px, 2.8vw, 30px);
+    line-height: 1.35;
+    letter-spacing: 0;
+    word-break: break-word;
+}
+
+.typing {
+    display: none;
+    margin-top: 18px;
+}
+
+.typing.active {
+    display: block;
+}
+
+.typing label {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.typing input {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 14px;
+    outline: none;
+}
+
+.typing input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.typing-result {
+    min-height: 22px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.answer {
+    display: none;
+    margin-top: 26px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+
+.answer.visible {
+    display: block;
+}
+
+.answer-main {
+    font-size: clamp(17px, 2.5vw, 26px);
+    line-height: 1.4;
+    font-weight: 700;
+    color: var(--primary);
+    word-break: break-word;
+}
+
+.answer-extra {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.action-btn {
+    min-height: 54px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--panel);
+    font-weight: 850;
+}
+
+.primary {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.primary:hover {
+    background: var(--primary-hover);
+}
+
+.marks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.marks button {
+    min-height: 58px;
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #ffffff;
+    font-weight: 850;
+}
+
+.red-btn {
+    background: var(--red);
+}
+
+.green-btn {
+    background: var(--green);
+}
+
+@media (max-width: 640px) {
+    .app {
+        padding: 10px;
+    }
+    .toolbar {
+        justify-content: flex-end;
+    }
+
+    .controls,
+    .actions,
+    .marks {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .segmented {
+        overflow-x: auto;
+    }
+
+    .segmented button {
+        flex: 1 0 auto;
+    }
+
+    .term {
+        min-height: 96px;
+    }
+}
+</style>
+</head>
+<body>
+<main class="app">
+    <section class="layout">
+        <div class="toolbar compact-toolbar">
+            <button class="small-btn" id="resetMarks" type="button">Сбросить метки</button>
+            <button class="icon-btn" id="themeToggle" type="button" aria-label="Переключить тему">◐</button>
+        </div>
+        <div class="main">
+            <div class="controls">
+                <div class="segmented" aria-label="Режим показа">
+                    <button id="modeNormal" class="active" type="button">EN → RU</button>
+                    <button id="modeReverse" type="button">RU → EN</button>
+                </div>
+
+                <div class="segmented" aria-label="Тип тренировки">
+                    <button id="studyCards" class="active" type="button">Карточки</button>
+                    <button id="studyTyping" type="button">Ввод</button>
+                </div>
+            </div>
+
+            <div class="status-line">
+                <span id="positionText">1 / 1</span>
+                <span id="markText">Без метки</span>
+            </div>
+
+            <div class="section-picker">
+                <button class="section-toggle" id="sectionToggle" type="button" aria-expanded="false" aria-controls="sectionNav">
+                    <span id="sectionCurrent">Раздел</span>
+                    <span class="section-toggle-arrow">▾</span>
+                </button>
+                <div class="section-nav" id="sectionNav" aria-label="Навигация по разделам" hidden></div>
+            </div>
+
+            <div class="card-nav" id="cardNav" aria-label="Навигация по карточкам"></div>
+
+            <article class="flashcard" aria-live="polite">
+                <div class="category">
+                    <span id="category">Category</span>
+                    <span id="directionText">EN → RU</span>
+                </div>
+                <div class="term" id="frontText">Question</div>
+
+                <div class="typing" id="typingBox">
+                    <label for="typedAnswer">Ваш ответ</label>
+                    <input id="typedAnswer" autocomplete="off" spellcheck="false">
+                    <div class="typing-result" id="typingResult"></div>
+                </div>
+
+                <div class="answer" id="answerBox">
+                    <div class="answer-main" id="backText">Answer</div>
+                    <div class="answer-extra" id="noteText"></div>
+                </div>
+            </article>
+
+            <div class="actions">
+                <button class="action-btn primary" id="showBtn" type="button">Показать перевод</button>
+                <button class="action-btn" id="nextBtn" type="button">Далее</button>
+            </div>
+
+            <div class="marks">
+                <button class="red-btn" data-mark="red" type="button">Не знаю</button>
+                <button class="green-btn" data-mark="green" type="button">Знаю</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+const STORAGE_KEY = "smnv-combined-interview-pack-v1";
+const THEME_KEY = "smnv-theme";
+
+const cards = [
+  {
+    category: "01 · Company HR Interview",
+    eng: "Please tell me about yourself.",
+    ru: "Расскажите немного о себе."
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I am a licensed Second Officer with experience in navigational watchkeeping, passage planning, cargo operations and bridge teamwork. I always work safely, responsibly and continuously improve my professional skills.",
+    ru: "Я дипломированный второй помощник капитана с опытом несения ходовой вахты, планирования переходов, грузовых операций и работы на мостике. Я всегда работаю безопасно, ответственно и постоянно развиваю свои профессиональные навыки."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Why do you want to join our company?",
+    ru: "Почему вы хотите работать в нашей компании?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "Your company has a strong reputation for safety and professionalism. I would like to develop my career and contribute to your team.",
+    ru: "Ваша компания имеет хорошую репутацию в области безопасности и профессионализма. Я хочу развивать свою карьеру и внести вклад в работу вашей команды."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Why should we hire you?",
+    ru: "Почему мы должны взять именно вас?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I am reliable, disciplined and safety-oriented. I work well in a team, communicate effectively and take responsibility for my duties.",
+    ru: "Я надёжный, дисциплинированный и всегда уделяю внимание безопасности. Я хорошо работаю в команде, эффективно общаюсь и ответственно выполняю свои обязанности."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "What are your strengths?",
+    ru: "Каковы ваши сильные стороны?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "My strengths are responsibility, calm decision-making, teamwork and willingness to learn.",
+    ru: "Мои сильные стороны — ответственность, спокойное принятие решений, командная работа и готовность учиться."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "What is your biggest weakness?",
+    ru: "Какой ваш главный недостаток?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I always try to improve my knowledge and sometimes spend extra time checking my work. I believe careful preparation improves safety.",
+    ru: "Я постоянно стараюсь совершенствовать свои знания и иногда трачу дополнительное время на проверку своей работы. Считаю, что тщательная подготовка повышает безопасность."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "How do you deal with stress?",
+    ru: "Как вы справляетесь со стрессом?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I stay calm, focus on priorities, communicate clearly and follow established procedures.",
+    ru: "Я сохраняю спокойствие, определяю приоритеты, поддерживаю чёткую связь и следую установленным процедурам."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Have you ever had a conflict on board?",
+    ru: "Были ли у вас конфликты на судне?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "Minor disagreements can happen, but I always solve them professionally through respectful communication and teamwork.",
+    ru: "Небольшие разногласия случаются, но я всегда решаю их профессионально с помощью уважительного общения и командной работы."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Why are you leaving your current company?",
+    ru: "Почему вы уходите из нынешней компании?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I am looking for new professional opportunities, career development and long-term employment with a stable company.",
+    ru: "Я ищу новые профессиональные возможности, карьерный рост и долгосрочную работу в стабильной компании."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Are you ready to work in an international crew?",
+    ru: "Готовы ли вы работать в международном экипаже?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "Yes. I enjoy working with people from different countries and always communicate respectfully in English.",
+    ru: "Да. Мне нравится работать с людьми из разных стран, и я всегда уважительно общаюсь на английском языке."
+},
+
+{
+    category: "01 · Company HR Interview",
+    eng: "Where do you see yourself in five years?",
+    ru: "Кем вы видите себя через пять лет?"
+},
+{
+    category: "01 · Company HR Interview",
+    eng: "I hope to continue developing my professional skills, take on greater responsibility and progress in my maritime career.",
+    ru: "Я надеюсь продолжить развивать профессиональные навыки, брать на себя больше ответственности и продвигаться в морской карьере."
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What should you do before taking over the watch?",
+    ru: "Что необходимо сделать перед принятием ходовой вахты?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "Before taking over the watch, I review the Master's standing orders, check the vessel's position, course, speed, traffic, weather and navigational equipment.",
+    ru: "Перед принятием вахты я изучаю постоянные распоряжения капитана, проверяю место судна, курс, скорость, движение судов, погоду и навигационное оборудование."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What information should the outgoing officer provide?",
+    ru: "Какую информацию должен передать сдающий вахту помощник?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "The outgoing officer should provide information about the vessel's position, traffic, weather, navigational hazards, equipment status and any special instructions.",
+    ru: "Сдающий вахту помощник должен сообщить информацию о месте судна, движении судов, погоде, навигационных опасностях, состоянии оборудования и особых указаниях."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "Would you take over the watch if you were not fully fit for duty?",
+    ru: "Примете ли вы вахту, если не готовы к её несению?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "No. I would immediately inform the Master because a watch should only be taken over by an officer who is fully fit for duty.",
+    ru: "Нет. Я немедленно сообщу капитану, потому что вахту должен принимать только помощник, полностью готовый к её несению."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What should you verify after taking over the watch?",
+    ru: "Что необходимо проверить после принятия вахты?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "I verify the vessel's position by all available means, monitor the traffic situation and ensure the voyage is proceeding according to the passage plan.",
+    ru: "Я проверяю место судна всеми доступными средствами, контролирую окружающее движение и убеждаюсь, что переход выполняется согласно плану."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What are the Master's standing orders?",
+    ru: "Что такое постоянные распоряжения капитана?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "The Master's standing orders contain instructions for the Officer of the Watch, including situations when the Master must be called.",
+    ru: "Постоянные распоряжения капитана содержат указания для вахтенного помощника, включая случаи, когда необходимо вызвать капитана."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "When should you call the Master after taking over the watch?",
+    ru: "Когда после принятия вахты необходимо вызвать капитана?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "I call the Master whenever the vessel's safety may be affected, including poor visibility, heavy traffic, equipment failure or any emergency.",
+    ru: "Я вызываю капитана всякий раз, когда безопасность судна может быть нарушена, включая плохую видимость, интенсивное движение, отказ оборудования или аварийную ситуацию."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "How do you verify the vessel's position?",
+    ru: "Как вы проверяете место судна?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "I verify the position using all available means, including ECDIS, radar, visual bearings and GPS.",
+    ru: "Я проверяю место судна всеми доступными средствами, включая ECDIS, радар, визуальные пеленги и GPS."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What is your responsibility as the Officer of the Watch?",
+    ru: "Какова ваша ответственность как вахтенного помощника?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "I am responsible for the safe navigation of the vessel, maintaining a proper lookout and complying with the Master's standing orders.",
+    ru: "Я отвечаю за безопасное судовождение, ведение надлежащего наблюдения и выполнение постоянных распоряжений капитана."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "Can you leave the bridge during your watch?",
+    ru: "Можете ли вы покинуть мостик во время своей вахты?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "No. I do not leave the bridge unless properly relieved or instructed by the Master.",
+    ru: "Нет. Я не покидаю мостик, пока меня должным образом не сменят или капитан не даст соответствующее указание."
+},
+
+{
+    category: "02 · Taking Over the Watch",
+    eng: "What is the most important principle when taking over the watch?",
+    ru: "Каков самый важный принцип при принятии вахты?"
+},
+{
+    category: "02 · Taking Over the Watch",
+    eng: "I never take over the watch until I fully understand the navigational situation and I am satisfied that it is safe to do so.",
+    ru: "Я никогда не принимаю вахту, пока полностью не пойму навигационную обстановку и не убедюсь, что это безопасно."
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What is your main responsibility during the navigational watch?",
+    ru: "Что является вашей основной обязанностью во время ходовой вахты?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "My main responsibility is to ensure the safe navigation of the vessel. I monitor the vessel's position, course and speed, follow the passage plan, and comply with the Master's standing orders and COLREG.",
+    ru: "Моя основная обязанность — обеспечить безопасное плавание судна. Я контролирую место судна, курс и скорость, следую плану перехода и соблюдаю распоряжения капитана и МППСС."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What do you do before taking over the watch?",
+    ru: "Что вы делаете перед принятием вахты?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "Before taking over the watch, I check the vessel's position, course, speed and route. I review the Master's standing orders, check the weather, traffic situation and navigational equipment.",
+    ru: "Перед принятием вахты я проверяю место судна, курс, скорость и маршрут. Изучаю распоряжения капитана, проверяю погоду, навигационную обстановку и оборудование."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What information do you receive from the Officer of the Watch?",
+    ru: "Какую информацию вы получаете от сдающего вахту помощника?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I receive information about the vessel's position, traffic, weather, navigational hazards, equipment status and any special instructions from the Master.",
+    ru: "Я получаю информацию о месте судна, навигационной обстановке, погоде, навигационных опасностях, состоянии оборудования и особых распоряжениях капитана."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "How do you maintain a proper lookout?",
+    ru: "Как вы обеспечиваете надлежащее наблюдение?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I maintain a proper lookout by sight, hearing and all available means, including radar, AIS and ECDIS. I continuously assess the traffic situation.",
+    ru: "Я обеспечиваю надлежащее наблюдение визуально, на слух и всеми доступными средствами, включая радар, AIS и ECDIS. Я постоянно оцениваю навигационную обстановку."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "How do you determine the vessel's position?",
+    ru: "Как вы определяете место судна?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I determine the vessel's position using GPS, ECDIS, radar and visual bearings. I verify the position at regular intervals according to the navigation area.",
+    ru: "Я определяю место судна с помощью GPS, ECDIS, радара и визуальных пеленгов. Проверяю место через установленные интервалы в зависимости от района плавания."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What would you do if visibility became restricted?",
+    ru: "Что вы будете делать при ухудшении видимости?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I would use radar continuously, maintain an enhanced lookout, sound the required fog signals and proceed in accordance with COLREG.",
+    ru: "Я буду постоянно использовать радар, усилю наблюдение, подам необходимые туманные сигналы и буду действовать в соответствии с МППСС."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What would you do if there was a risk of collision?",
+    ru: "Что вы будете делать при риске столкновения?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I would assess the situation using all available means and take early and substantial action in accordance with COLREG.",
+    ru: "Я оценю ситуацию всеми доступными средствами и своевременно предприму решительные действия в соответствии с МППСС."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "When would you call the Master?",
+    ru: "В каких случаях вы вызываете капитана?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I would call the Master in restricted visibility, heavy traffic, equipment failure, bad weather or whenever I am in doubt.",
+    ru: "Я вызываю капитана при ограниченной видимости, интенсивном движении, отказе оборудования, плохой погоде или если у меня возникают сомнения."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What navigational equipment do you monitor during your watch?",
+    ru: "Какое оборудование вы контролируете во время вахты?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I monitor ECDIS, radar, gyro compass, AIS, GPS, echo sounder, autopilot and bridge alarms.",
+    ru: "Я контролирую ECDIS, радар, гирокомпас, AIS, GPS, эхолот, автопилот и аварийные сигналы мостика."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What would you do if ECDIS or GPS failed?",
+    ru: "Что вы будете делать при отказе ECDIS или GPS?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I would inform the Master and continue navigation using alternative means such as radar, visual observations and other available equipment.",
+    ru: "Я сообщу капитану и продолжу навигацию с использованием радара, визуальных наблюдений и других доступных средств."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "What records do you keep during your watch?",
+    ru: "Какие записи вы ведёте во время вахты?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I record the vessel's position, course, speed, weather, engine movements, communications and any important navigational events in the bridge logbook.",
+    ru: "Я записываю место судна, курс, скорость, погоду, изменения режима работы двигателя, радиообмен и все важные навигационные события в судовой журнал."
+},
+
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "How do you hand over the watch?",
+    ru: "Как вы сдаёте вахту?"
+},
+{
+    category: "03 · Navigational Watch Routine",
+    eng: "I brief the relieving officer on the vessel's position, traffic, weather, equipment status and the Master's instructions. I make sure he fully understands the situation before I leave the bridge.",
+    ru: "Я информирую сменяющего помощника о месте судна, навигационной обстановке, погоде, состоянии оборудования и распоряжениях капитана. Я убеждаюсь, что он полностью понял обстановку, прежде чем покинуть мостик."
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What is Bridge Resource Management?",
+    ru: "Что такое Bridge Resource Management?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Bridge Resource Management is the effective use of all available resources, including personnel, equipment and information, to ensure the safe navigation of the vessel.",
+    ru: "Bridge Resource Management — это эффективное использование всех доступных ресурсов, включая экипаж, оборудование и информацию, для обеспечения безопасного судовождения."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Why is BRM important?",
+    ru: "Почему BRM так важен?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "BRM helps prevent human error, improves teamwork, enhances situational awareness and increases the safety of navigation.",
+    ru: "BRM помогает предотвращать человеческие ошибки, улучшает взаимодействие в команде, повышает ситуационную осведомлённость и безопасность плавания."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What are the main principles of BRM?",
+    ru: "Каковы основные принципы BRM?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "The main principles are communication, teamwork, situational awareness, decision-making, workload management and mutual cross-checking.",
+    ru: "Основные принципы — это связь, командная работа, ситуационная осведомлённость, принятие решений, распределение нагрузки и взаимный контроль."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What is situational awareness?",
+    ru: "Что такое situational awareness?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Situational awareness is understanding the vessel's position, surrounding traffic, weather, navigational hazards and predicting what may happen next.",
+    ru: "Ситуационная осведомлённость — это понимание местоположения судна, окружающего движения, погодных условий, навигационных опасностей и прогнозирование дальнейшего развития ситуации."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "How do you maintain good communication on the bridge?",
+    ru: "Как поддерживать хорошую связь на мостике?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "I use clear and standard communication, confirm important orders and immediately report any concerns or unusual situations.",
+    ru: "Я использую чёткую стандартную связь, подтверждаю важные команды и немедленно сообщаю о любых сомнениях или необычных ситуациях."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What would you do if you noticed the Master made a mistake?",
+    ru: "Что вы сделаете, если заметите ошибку капитана?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "I would respectfully express my concern, provide the relevant information and continue to support the Master in ensuring safe navigation.",
+    ru: "Я уважительно выскажу своё замечание, сообщу необходимую информацию и продолжу помогать капитану обеспечивать безопасное плавание."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Why is cross-checking important?",
+    ru: "Почему взаимный контроль так важен?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Cross-checking helps detect mistakes early and ensures that navigational decisions are verified by another member of the bridge team.",
+    ru: "Взаимный контроль помогает своевременно обнаружить ошибки и обеспечивает проверку навигационных решений другим членом команды мостика."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "How do you manage workload during a busy watch?",
+    ru: "Как вы распределяете нагрузку во время напряжённой вахты?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "I prioritize essential tasks, avoid distractions, use all available resources and ask for assistance when necessary.",
+    ru: "Я определяю приоритеты, избегаю отвлекающих факторов, использую все доступные ресурсы и при необходимости прошу помощи."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What is closed-loop communication?",
+    ru: "Что такое closed-loop communication?"
+},
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "Closed-loop communication means repeating important orders, confirming they are understood correctly and reporting when they have been carried out.",
+    ru: "Closed-loop communication означает повторение важных команд, подтверждение их правильного понимания и доклад после выполнения."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "What is your responsibility as an officer under BRM?",
+    ru: "Какова ваша ответственность как помощника в рамках BRM?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What do you do if there is a risk of collision?",
+    ru: "Что вы делаете при возникновении риска столкновения?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I assess the situation using all available means and take early and substantial action in accordance with COLREG.",
+    ru: "Я оцениваю ситуацию всеми доступными средствами и своевременно принимаю решительные действия в соответствии с МППСС."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "How do you determine if there is a risk of collision?",
+    ru: "Как вы определяете риск столкновения?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I use visual observations, radar, AIS, ARPA and compass bearings. A constant bearing with decreasing range indicates a risk of collision.",
+    ru: "Я использую визуальное наблюдение, радар, AIS, ARPA и пеленги. Постоянный пеленг при уменьшающейся дистанции указывает на риск столкновения."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What is the first action you should take?",
+    ru: "Какое первое действие вы должны предпринять?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I assess the situation carefully, identify the give-way or stand-on vessel and act in accordance with COLREG.",
+    ru: "Я внимательно оцениваю ситуацию, определяю судно, уступающее дорогу, и действую в соответствии с МППСС."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What should a give-way vessel do?",
+    ru: "Что должно делать уступающее дорогу судно?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "A give-way vessel should take early and substantial action to keep well clear.",
+    ru: "Уступающее дорогу судно должно своевременно и решительно предпринять действия для безопасного расхождения."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What should a stand-on vessel do?",
+    ru: "Что должно делать судно, имеющее преимущество?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "A stand-on vessel should maintain course and speed but take action if the give-way vessel does not act appropriately.",
+    ru: "Судно, имеющее преимущество, должно сохранять курс и скорость, но принять меры, если другое судно не действует должным образом."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What do you do in restricted visibility?",
+    ru: "Что вы делаете при ограниченной видимости?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I use radar continuously, maintain an enhanced lookout, proceed at a safe speed and sound the required fog signals.",
+    ru: "Я постоянно использую радар, усиливаю наблюдение, следую безопасной скоростью и подаю необходимые туманные сигналы."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "Should you use AIS alone to avoid collision?",
+    ru: "Можно ли использовать только AIS для предотвращения столкновения?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "No. AIS is only an aid. Collision avoidance must be based on all available means.",
+    ru: "Нет. AIS является только вспомогательным средством. Предотвращение столкновения должно основываться на всех доступных средствах."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "When should you call the Master?",
+    ru: "Когда вы должны вызвать капитана?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I call the Master immediately if there is a risk of collision, restricted visibility or any doubt about the situation.",
+    ru: "Я немедленно вызываю капитана при риске столкновения, ограниченной видимости или любых сомнениях в оценке ситуации."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What speed should you maintain in restricted visibility?",
+    ru: "Какую скорость следует поддерживать при ограниченной видимости?"
+},
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "I proceed at a safe speed appropriate to the prevailing circumstances and conditions.",
+    ru: "Я следую безопасной скоростью, соответствующей существующим обстоятельствам и условиям."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "What is the main principle of collision avoidance?",
+    ru: "Каков главный принцип предотвращения столкновения?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "When should you call the Master?",
+    ru: "Когда вы должны вызвать капитана?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "I call the Master whenever required by the standing orders or whenever I am in doubt.",
+    ru: "Я вызываю капитана всегда, когда этого требуют постоянные распоряжения капитана или если у меня возникают сомнения."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "Would you call the Master in restricted visibility?",
+    ru: "Вызовете ли вы капитана при ограниченной видимости?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "Yes. I would call the Master immediately if visibility became restricted.",
+    ru: "Да. Я немедленно вызову капитана при ухудшении видимости."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "When should you call the Master because of traffic?",
+    ru: "Когда необходимо вызвать капитана из-за навигационной обстановки?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "I call the Master in heavy traffic or whenever there is a risk of collision.",
+    ru: "Я вызываю капитана при интенсивном движении или при возникновении риска столкновения."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "Would you call the Master if the vessel deviated from the passage plan?",
+    ru: "Вызовете ли вы капитана при отклонении от плана перехода?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "Yes. I would report the situation immediately and follow the Master's instructions.",
+    ru: "Да. Я немедленно доложу обстановку и буду выполнять указания капитана."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "When do you call the Master because of weather?",
+    ru: "Когда вы вызываете капитана из-за погоды?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "I call the Master if severe weather affects the safety of navigation.",
+    ru: "Я вызываю капитана, если тяжёлые погодные условия влияют на безопасность плавания."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "What equipment failures require calling the Master?",
+    ru: "Какие отказы оборудования требуют вызова капитана?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "I call the Master if ECDIS, radar, GPS, gyro compass, steering gear or any essential navigational equipment fails.",
+    ru: "Я вызываю капитана при отказе ECDIS, радара, GPS, гирокомпаса, рулевого устройства или другого важного навигационного оборудования."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "Would you call the Master if you were uncertain?",
+    ru: "Вызовете ли вы капитана, если не уверены в своих действиях?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "Yes. If I am in doubt, I always call the Master without delay.",
+    ru: "Да. Если у меня возникают сомнения, я всегда без промедления вызываю капитана."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "Should you hesitate before calling the Master?",
+    ru: "Следует ли медлить с вызовом капитана?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "No. It is better to call the Master early than too late.",
+    ru: "Нет. Лучше вызвать капитана раньше, чем слишком поздно."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "What if another vessel behaves unpredictably?",
+    ru: "Что делать, если другое судно действует непредсказуемо?"
+},
+{
+    category: "06 · When to Call the Master",
+    eng: "I assess the situation, take appropriate action under COLREG and call the Master if necessary.",
+    ru: "Я оцениваю ситуацию, принимаю меры согласно МППСС и при необходимости вызываю капитана."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "What is the general rule?",
+    ru: "Какое главное правило?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "What is passage planning?",
+    ru: "Что такое планирование перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "Passage planning is the process of preparing a safe voyage from the berth at the departure port to the berth at the destination port.",
+    ru: "Планирование перехода — это процесс подготовки безопасного перехода от причала порта отправления до причала порта назначения."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What are the stages of passage planning?",
+    ru: "Какие этапы включает планирование перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "The four stages are appraisal, planning, execution and monitoring.",
+    ru: "Четыре этапа: оценка, планирование, выполнение и контроль."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What information do you collect during the appraisal stage?",
+    ru: "Какую информацию вы собираете на этапе оценки?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "I collect charts, publications, weather forecasts, notices to mariners, tides, currents and local regulations.",
+    ru: "Я собираю карты, навигационные издания, прогнозы погоды, извещения мореплавателям, данные о приливах, течениях и местные правила."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What should be included in a passage plan?",
+    ru: "Что должно входить в план перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "The passage plan should include the route, waypoints, wheel-over positions, no-go areas, UKC, reporting points and contingency plans.",
+    ru: "План перехода должен включать маршрут, путевые точки, точки начала поворотов, запретные районы, запас под килем, пункты доклада и аварийные варианты."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What is a no-go area?",
+    ru: "Что такое no-go area?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "A no-go area is an area where the vessel must not enter because the available depth or navigational safety is insufficient.",
+    ru: "No-go area — это район, куда судно не должно заходить из-за недостаточной глубины или опасной навигационной обстановки."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What is UKC?",
+    ru: "Что такое UKC?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "UKC means Under Keel Clearance. It is the minimum safe distance between the ship's keel and the seabed.",
+    ru: "UKC означает запас воды под килем. Это минимальное безопасное расстояние между килем судна и дном."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "Who approves the passage plan?",
+    ru: "Кто утверждает план перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "The passage plan is prepared by the navigating officer and approved by the Master before departure.",
+    ru: "План перехода готовит штурман, а перед выходом его утверждает капитан."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "How do you monitor the passage?",
+    ru: "Как вы контролируете выполнение плана перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "I continuously verify the vessel's position by all available means and compare the actual track with the planned route.",
+    ru: "Я постоянно проверяю место судна всеми доступными средствами и сравниваю фактический путь с запланированным маршрутом."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "What would you do if the vessel had to deviate from the passage plan?",
+    ru: "Что вы будете делать, если судну необходимо отклониться от плана перехода?"
+},
+{
+    category: "07 · Passage Planning",
+    eng: "I inform the Master, assess the situation, update the plan if necessary and ensure the voyage remains safe.",
+    ru: "Я сообщаю капитану, оцениваю ситуацию, при необходимости корректирую план и обеспечиваю безопасное продолжение перехода."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "Why is passage planning important?",
+    ru: "Почему планирование перехода важно?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What is ECDIS?",
+    ru: "Что такое ECDIS?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "ECDIS is an Electronic Chart Display and Information System used for navigation and route monitoring.",
+    ru: "ECDIS — это электронная картографическая навигационно-информационная система, используемая для судовождения и контроля движения по маршруту."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What are the advantages of ECDIS?",
+    ru: "Каковы преимущества ECDIS?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "ECDIS improves situational awareness, reduces workload and provides automatic alarms and route monitoring.",
+    ru: "ECDIS улучшает навигационную обстановку, снижает нагрузку на судоводителя и обеспечивает автоматические предупреждения и контроль маршрута."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What charts are used in ECDIS?",
+    ru: "Какие карты используются в ECDIS?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "ECDIS uses official Electronic Navigational Charts (ENC) issued by authorized hydrographic offices.",
+    ru: "ECDIS использует официальные электронные навигационные карты (ENC), выпускаемые уполномоченными гидрографическими службами."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "How do you keep ECDIS charts up to date?",
+    ru: "Как вы поддерживаете карты ECDIS в актуальном состоянии?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "I install official chart updates regularly and verify that all corrections have been applied successfully.",
+    ru: "Я регулярно устанавливаю официальные обновления карт и проверяю, что все корректуры успешно применены."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "Why is chart correction important?",
+    ru: "Почему корректура карт важна?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "Up-to-date charts are essential for safe navigation and compliance with international regulations.",
+    ru: "Актуальные карты необходимы для безопасного плавания и соблюдения международных требований."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What would you do if an ENC was not updated?",
+    ru: "Что вы будете делать, если ENC не обновлена?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "I would update the chart immediately. If this is not possible, I would inform the Master and use all available information to ensure safe navigation.",
+    ru: "Я немедленно обновлю карту. Если это невозможно, сообщу капитану и использую всю доступную информацию для обеспечения безопасного плавания."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What should you check before starting a voyage?",
+    ru: "Что необходимо проверить перед началом рейса?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "I check that all charts are updated, the safety settings are correct and the planned route has been verified.",
+    ru: "Я проверяю, что все карты обновлены, настройки безопасности установлены правильно, а маршрут проверен."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What safety settings do you check on ECDIS?",
+    ru: "Какие настройки безопасности вы проверяете?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "I check the safety contour, safety depth, safety height and alarm settings.",
+    ru: "Я проверяю безопасную изобату, безопасную глубину, безопасную высоту и настройки аварийных сигналов."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "Can ECDIS replace proper lookout?",
+    ru: "Может ли ECDIS заменить надлежащее наблюдение?"
+},
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "No. ECDIS is only a navigational aid. A proper lookout must always be maintained.",
+    ru: "Нет. ECDIS является лишь навигационным средством. Надлежащее наблюдение должно вестись постоянно."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "What is your responsibility as the Officer of the Watch?",
+    ru: "Какова ваша ответственность как вахтенного помощника?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What do you do before the vessel arrives at the pilot station?",
+    ru: "Что вы делаете перед прибытием к месту посадки лоцмана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "I prepare the bridge, check navigational equipment, review the passage plan and ensure the pilot boarding arrangements are ready.",
+    ru: "Я подготавливаю мостик, проверяю навигационное оборудование, просматриваю план перехода и убеждаюсь, что средства посадки лоцмана готовы."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What documents should be ready for the pilot?",
+    ru: "Какие документы должны быть готовы для лоцмана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "The pilot card, passage plan, manoeuvring information and other relevant ship's documents should be available.",
+    ru: "Должны быть подготовлены лоцманская карточка, план перехода, маневренная информация и другие необходимые судовые документы."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What do you check before pilot boarding?",
+    ru: "Что вы проверяете перед посадкой лоцмана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "I check the pilot ladder, lifebuoy with a self-igniting light, heaving line, lighting and communication equipment.",
+    ru: "Я проверяю лоцманский трап, спасательный круг с самозажигающимся огнём, бросательный конец, освещение и средства связи."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "Who is responsible for the pilot ladder?",
+    ru: "Кто отвечает за лоцманский трап?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "The Officer in Charge is responsible for ensuring the pilot ladder is rigged correctly and complies with SOLAS requirements.",
+    ru: "Ответственный помощник обязан убедиться, что лоцманский трап установлен правильно и соответствует требованиям SOLAS."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "Does the pilot replace the Master?",
+    ru: "Заменяет ли лоцман капитана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "No. The Master always remains responsible for the safe navigation of the vessel.",
+    ru: "Нет. Капитан всегда остаётся ответственным за безопасное управление судном."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What is a Master-Pilot Exchange?",
+    ru: "Что такое Master-Pilot Exchange?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "It is a discussion between the Master and the pilot about the passage plan, manoeuvres, local conditions and communication.",
+    ru: "Это обсуждение между капитаном и лоцманом плана перехода, манёвров, местных условий и порядка взаимодействия."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What do you do after the pilot comes on board?",
+    ru: "Что вы делаете после посадки лоцмана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "I monitor the vessel's position, follow the Master's instructions and maintain an effective bridge team.",
+    ru: "Я контролирую место судна, выполняю указания капитана и обеспечиваю эффективную работу команды мостика."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What should you do if you disagree with the pilot?",
+    ru: "Что делать, если вы не согласны с действиями лоцмана?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "I immediately inform the Master and discuss the situation professionally. Safety is always the highest priority.",
+    ru: "Я немедленно сообщаю капитану и профессионально обсуждаю ситуацию. Безопасность всегда является главным приоритетом."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What information should be exchanged with the pilot?",
+    ru: "Какую информацию необходимо обменять с лоцманом?"
+},
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "Information about the vessel's condition, manoeuvring characteristics, passage plan, tug assistance and any limitations.",
+    ru: "Информация о состоянии судна, его маневренных характеристиках, плане перехода, буксирах и существующих ограничениях."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "What is your responsibility during pilotage?",
+    ru: "Какова ваша ответственность во время лоцманской проводки?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "What are your duties during anchoring operations?",
+    ru: "Что входит в ваши обязанности во время постановки на якорь?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "My duties are to supervise the anchor party, maintain communication with the bridge and ensure the operation is carried out safely.",
+    ru: "Мои обязанности — руководить якорной командой, поддерживать связь с мостиком и обеспечивать безопасное проведение операции."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "How do you prepare for anchoring?",
+    ru: "Как вы готовитесь к постановке на якорь?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "I check the anchor equipment, assign duties to the crew, test communications and prepare the forecastle for anchoring.",
+    ru: "Я проверяю якорное устройство, распределяю обязанности, проверяю связь и готовлю бак к постановке на якорь."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What equipment is used during anchoring?",
+    ru: "Какое оборудование используется при постановке на якорь?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "We use the anchor, anchor chain, windlass, chain stopper, brake and communication equipment.",
+    ru: "Мы используем якорь, якорную цепь, брашпиль, стопор цепи, тормоз и средства связи."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "How do you communicate during anchoring?",
+    ru: "Как вы поддерживаете связь во время постановки на якорь?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "I communicate with the bridge by portable VHF radio and report the number of shackles and the anchor status.",
+    ru: "Я поддерживаю связь с мостиком по переносной УКВ-радиостанции и докладываю количество вытравленных смычек и состояние якоря."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What is meant by \"walking out the anchor\"?",
+    ru: "Что означает «walking out the anchor»?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "It means lowering the anchor under control with the windlass instead of letting it run freely.",
+    ru: "Это означает контролируемое опускание якоря с помощью брашпиля, а не свободную отдачу."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What would you do if the anchor started dragging?",
+    ru: "Что вы будете делать, если якорь пополз?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "I would inform the Master immediately, monitor the vessel's position and prepare for further instructions.",
+    ru: "Я немедленно сообщу капитану, буду контролировать место судна и подготовлюсь к дальнейшим указаниям."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "How do you know the vessel is safely at anchor?",
+    ru: "Как вы определяете, что судно безопасно стоит на якоре?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "I monitor the vessel's position, anchor bearings, chain direction and available anchor watch information.",
+    ru: "Я контролирую место судна, пеленги на ориентиры, направление якорной цепи и данные якорной вахты."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What safety precautions should be followed?",
+    ru: "Какие меры безопасности необходимо соблюдать?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "All crew must wear PPE, stay clear of the anchor chain and follow the officer's instructions.",
+    ru: "Все члены экипажа должны использовать СИЗ, держаться подальше от якорной цепи и выполнять указания помощника."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What do you do after anchoring is completed?",
+    ru: "Что вы делаете после завершения постановки на якорь?"
+},
+{
+    category: "10 · Anchoring Operations",
+    eng: "I secure the windlass, check the brake and chain stopper, tidy the forecastle and report completion to the bridge.",
+    ru: "Я закрепляю брашпиль, проверяю тормоз и стопор цепи, привожу бак в порядок и докладываю на мостик о завершении операции."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "What is your responsibility as the officer in charge?",
+    ru: "Какова ваша ответственность как руководителя якорной команды?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "What are your duties during mooring operations?",
+    ru: "Что входит в ваши обязанности во время швартовных операций?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "My duties are to supervise the mooring team, maintain communication with the bridge and ensure the operation is carried out safely.",
+    ru: "Мои обязанности — руководить швартовной командой, поддерживать связь с мостиком и обеспечивать безопасное проведение операции."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "How do you prepare for mooring operations?",
+    ru: "Как вы готовитесь к швартовке?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I check the mooring equipment, assign duties to the crew, conduct a safety briefing and establish communication with the bridge.",
+    ru: "Я проверяю швартовное оборудование, распределяю обязанности, провожу инструктаж по безопасности и устанавливаю связь с мостиком."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What equipment is used during mooring?",
+    ru: "Какое оборудование используется при швартовке?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "We use mooring winches, ropes, wires, bitts, bollards, fairleads and stoppers.",
+    ru: "Мы используем швартовные лебёдки, канаты, стальные тросы, кнехты, береговые тумбы, киповые планки и стопоры."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What safety precautions should be followed?",
+    ru: "Какие меры безопасности необходимо соблюдать?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "All crew must wear PPE, stay clear of snap-back zones and follow the officer's instructions at all times.",
+    ru: "Все члены экипажа должны использовать СИЗ, находиться вне опасных зон разрыва канатов и выполнять указания помощника."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What is a snap-back zone?",
+    ru: "Что такое snap-back zone?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "A snap-back zone is the area where a mooring line may recoil if it parts under tension.",
+    ru: "Snap-back zone — это зона, куда может отскочить швартов при его разрыве под нагрузкой."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "How do you communicate during mooring?",
+    ru: "Как вы поддерживаете связь во время швартовки?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I communicate with the bridge by portable VHF radio and report the progress of the operation clearly.",
+    ru: "Я поддерживаю связь с мостиком по переносной УКВ-радиостанции и чётко докладываю о ходе операции."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What would you do if a mooring line parted?",
+    ru: "Что вы будете делать, если швартовный конец оборвался?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I would stop the operation if necessary, keep the crew clear of danger, inform the bridge and replace the damaged line.",
+    ru: "При необходимости я остановлю операцию, выведу людей из опасной зоны, сообщу на мостик и заменю повреждённый швартов."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What would you do if the winch failed?",
+    ru: "Что вы будете делать при отказе швартовной лебёдки?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I would inform the bridge immediately, stop using the winch and follow the Master's instructions.",
+    ru: "Я немедленно сообщу на мостик, прекращу использовать лебёдку и буду действовать по указанию капитана."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "How do you know the vessel is securely moored?",
+    ru: "Как вы понимаете, что судно надёжно ошвартовано?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I check that all mooring lines are correctly arranged, properly tensioned and continuously monitored.",
+    ru: "Я проверяю, что все швартовы заведены правильно, имеют необходимое натяжение и находятся под постоянным наблюдением."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What are breast lines and spring lines?",
+    ru: "Что такое прижимные и шпринговые швартовы?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "Breast lines keep the vessel alongside the berth, while spring lines prevent the vessel from moving forward or aft.",
+    ru: "Прижимные швартовы удерживают судно у причала, а шпринги предотвращают его продольное перемещение."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What is your responsibility as the officer in charge?",
+    ru: "В чём заключается ваша ответственность как руководителя швартовной команды?"
+},
+{
+    category: "11 · Mooring Operations",
+    eng: "I ensure the operation is safe, supervise the crew, maintain communication with the bridge and report any problems immediately.",
+    ru: "Я обеспечиваю безопасность операции, руковожу экипажем, поддерживаю связь с мостиком и немедленно докладываю о любых проблемах."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "What do you do after mooring is completed?",
+    ru: "Что вы делаете после окончания швартовки?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "What are your duties during cargo operations?",
+    ru: "Что входит в ваши обязанности во время грузовых операций?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "My duties are to supervise cargo operations, ensure safety, maintain communication with the terminal, monitor the vessel's stability and keep accurate cargo records.",
+    ru: "Мои обязанности - контролировать грузовые операции, обеспечивать безопасность, поддерживать связь с терминалом, следить за остойчивостью судна и вести необходимую документацию."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "How do you prepare the vessel for cargo operations?",
+    ru: "Как вы подготавливаете судно к грузовым операциям?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I check the cargo plan, cargo gear, cargo holds, ballast condition and communication equipment. I also make sure the crew is ready for cargo operations.",
+    ru: "Я проверяю грузовой план, грузовое оборудование, трюмы, балластное состояние и средства связи. Также убеждаюсь, что экипаж готов к грузовым операциям."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What do you check before loading begins?",
+    ru: "Что вы проверяете перед началом погрузки?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I check that the cargo holds are clean and ready, the loading plan is approved, and all safety measures are in place.",
+    ru: "Я проверяю, что трюмы чистые и готовы, грузовой план утверждён и все меры безопасности выполнены."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "How do you monitor cargo operations?",
+    ru: "Как вы контролируете грузовые операции?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I monitor the loading rate, cargo distribution, vessel's draft and stability. I also maintain communication with the terminal throughout the operation.",
+    ru: "Я контролирую скорость погрузки, распределение груза, осадку и остойчивость судна. Также постоянно поддерживаю связь с терминалом."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "How do you communicate with the terminal?",
+    ru: "Как вы поддерживаете связь с терминалом?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I communicate with the terminal by VHF radio or other agreed means. All important instructions and changes are confirmed clearly.",
+    ru: "Я поддерживаю связь с терминалом по УКВ или другими согласованными средствами. Все важные указания и изменения подтверждаются чётко."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What would you do if cargo damage was found?",
+    ru: "Что вы будете делать, если обнаружите повреждение груза?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I would stop the operation if necessary, inform the Chief Officer, record the damage and report it to the terminal representative.",
+    ru: "При необходимости я остановлю грузовые операции, сообщу старшему помощнику, зафиксирую повреждение и сообщу представителю терминала."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What would you do if cargo operations became unsafe?",
+    ru: "Что вы будете делать, если грузовые операции стали небезопасными?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I would stop the operation immediately, eliminate the unsafe condition and resume work only after it is safe.",
+    ru: "Я немедленно остановлю работы, устраню опасную ситуацию и возобновлю операции только после обеспечения безопасности."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What safety precautions are required during cargo operations?",
+    ru: "Какие меры безопасности соблюдаются во время грузовых операций?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "All personnel must wear PPE, follow safety procedures, maintain good communication and keep unauthorized persons away from the working area.",
+    ru: "Все участники должны использовать средства индивидуальной защиты, соблюдать инструкции по безопасности, поддерживать связь и не допускать посторонних в рабочую зону."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "How do you monitor the vessel's stability during loading?",
+    ru: "Как вы контролируете остойчивость судна во время погрузки?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I monitor drafts, trim, heel and ballast condition. I compare the actual condition with the cargo loading plan.",
+    ru: "Я контролирую осадку, дифферент, крен и состояние балласта. Сравниваю фактическое состояние судна с грузовым планом."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What records do you keep during cargo operations?",
+    ru: "Какие записи вы ведёте во время грузовых операций?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I record loading times, cargo quantities, draft readings, ballast operations and any unusual events in the cargo log.",
+    ru: "Я записываю время погрузки, количество груза, замеры осадки, балластные операции и все необычные события в грузовой журнал."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "What is your responsibility as the Officer on Watch during cargo operations?",
+    ru: "В чём заключается ваша ответственность как вахтенного помощника во время грузовых операций?"
+},
+{
+    category: "12 · Cargo Operations",
+    eng: "I ensure cargo operations are carried out safely, follow the cargo plan and report any problems to the Chief Officer immediately.",
+    ru: "Я обеспечиваю безопасное проведение грузовых операций, соблюдение грузового плана и немедленно докладываю старшему помощнику о любых проблемах."
+},
+
+{
+    category: "12 · Cargo Operations",
+    eng: "How do you complete cargo operations?",
+    ru: "Как вы завершаете грузовые операции?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "What cargo documents are used on board?",
+    ru: "Какие грузовые документы используются на судне?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "The main cargo documents are the Bill of Lading, Cargo Manifest, Mate’s Receipt, Cargo Plan, Stowage Plan, Statement of Facts and Notice of Readiness.",
+    ru: "Основные грузовые документы: коносамент, грузовой манифест, штурманская расписка, грузовой план, план размещения груза, акт фактов и уведомление о готовности."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is the purpose of the Bill of Lading?",
+    ru: "Каково назначение коносамента?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "The Bill of Lading is a receipt for the cargo, evidence of the contract of carriage and, in many cases, a document of title.",
+    ru: "Коносамент является распиской в получении груза, подтверждением договора перевозки и, во многих случаях, документом, подтверждающим право собственности."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is a Cargo Manifest?",
+    ru: "Что такое грузовой манифест?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "A Cargo Manifest contains detailed information about all cargo carried on board, including quantity, description, consignee and destination.",
+    ru: "Грузовой манифест содержит подробную информацию обо всём грузе на борту, включая количество, описание, получателя и порт назначения."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is a Mate’s Receipt?",
+    ru: "Что такое штурманская расписка?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "A Mate’s Receipt confirms that the cargo has been received on board. It is issued before the Bill of Lading.",
+    ru: "Штурманская расписка подтверждает, что груз принят на борт. Она оформляется до выдачи коносамента."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is a Cargo Plan?",
+    ru: "Что такое грузовой план?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "A Cargo Plan shows how the cargo will be loaded, distributed and secured to ensure the vessel’s safety and stability.",
+    ru: "Грузовой план показывает, как груз будет погружен, распределён и закреплён для обеспечения безопасности и остойчивости судна."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is a Stowage Plan?",
+    ru: "Что такое план размещения груза?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "A Stowage Plan shows the exact location of every cargo lot on board. It is used during loading, discharge and cargo inspections.",
+    ru: "План размещения показывает точное расположение каждой партии груза на борту. Он используется при погрузке, выгрузке и проверках."
+},
+
+{
+    category: "13 · Cargo Documents",
+    eng: "What is the Statement of Facts?",
+    ru: "Что такое Statement of Facts?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "The Statement of Facts records the times and events during port operations, including arrival, loading, discharge and departure.",
+    ru: "Statement of Facts фиксирует время и события во время стоянки судна в порту, включая прибытие, грузовые операции и отход."
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "What is the Notice of Readiness?",
+    ru: "Что такое Notice of Readiness?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "The Notice of Readiness is a document stating that the vessel is ready to load or discharge cargo.",
+    ru: "Notice of Readiness подтверждает, что судно готово к погрузке или выгрузке груза."
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "What is the difference between a Mate’s Receipt and a Bill of Lading?",
+    ru: "В чём разница между штурманской распиской и коносаментом?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "The Mate’s Receipt confirms receipt of the cargo on board, while the Bill of Lading is the official transport document issued to the shipper.",
+    ru: "Штурманская расписка подтверждает приём груза на судно, а коносамент является официальным перевозочным документом для грузоотправителя."
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "Who signs cargo documents?",
+    ru: "Кто подписывает грузовые документы?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "Depending on the document, they are signed by the Master, Chief Officer, terminal representative or cargo surveyor.",
+    ru: "В зависимости от документа его подписывают капитан, старший помощник, представитель терминала или сюрвейер."
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "What documents do you check before cargo operations?",
+    ru: "Какие документы вы проверяете перед грузовыми операциями?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "I check the cargo plan, stowage plan, loading instructions and other documents required for safe cargo operations.",
+    ru: "Я проверяю грузовой план, план размещения груза, инструкции по погрузке и другие документы, необходимые для безопасных грузовых операций."
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "What would you do if you found a mistake in a cargo document?",
+    ru: "Что вы будете делать, если обнаружите ошибку в грузовом документе?"
+},
+{
+    category: "13 · Cargo Documents",
+    eng: "I would report the mistake to the Chief Officer immediately and ensure it is corrected before the document is finalized.",
+    ru: "Я немедленно сообщу об ошибке старшему помощнику и прослежу, чтобы документ был исправлен до его окончательного оформления."
+},
+{
+    category: "14 · MARPOL",
+    eng: "What is MARPOL?",
+    ru: "Что такое MARPOL?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "MARPOL is the International Convention for the Prevention of Pollution from Ships. It aims to protect the marine environment from operational and accidental pollution.",
+    ru: "MARPOL — это Международная конвенция по предотвращению загрязнения с судов. Она направлена на защиту морской среды от эксплуатационного и аварийного загрязнения."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "How many annexes does MARPOL have?",
+    ru: "Сколько приложений содержит MARPOL?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "MARPOL has six annexes covering oil, noxious liquid substances, harmful substances in packaged form, sewage, garbage and air pollution.",
+    ru: "MARPOL содержит шесть приложений, посвящённых нефти, вредным жидким веществам, опасным грузам в упаковке, сточным водам, мусору и загрязнению атмосферы."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What does Annex I cover?",
+    ru: "Что регулирует Приложение I?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "Annex I covers the prevention of pollution by oil and includes requirements for the Oil Record Book and oily water discharge.",
+    ru: "Приложение I регулирует предотвращение загрязнения нефтью и содержит требования к Oil Record Book и сбросу нефтесодержащих вод."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What does Annex V cover?",
+    ru: "Что регулирует Приложение V?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "Annex V covers the prevention of pollution by garbage and sets rules for garbage management and disposal.",
+    ru: "Приложение V регулирует предотвращение загрязнения мусором и устанавливает правила обращения и удаления мусора."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What is the Garbage Management Plan?",
+    ru: "Что такое Garbage Management Plan?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "It is a shipboard plan describing the procedures for collecting, separating, storing and disposing of garbage.",
+    ru: "Это судовой план, описывающий процедуры сбора, сортировки, хранения и удаления мусора."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What is the Oil Record Book?",
+    ru: "Что такое Oil Record Book?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "The Oil Record Book is used to record all operations involving oil, as required by MARPOL Annex I.",
+    ru: "Oil Record Book используется для регистрации всех операций с нефтью в соответствии с Приложением I MARPOL."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "Can garbage be discharged into the sea?",
+    ru: "Можно ли сбрасывать мусор в море?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "Only certain types of garbage may be discharged under specific MARPOL conditions. Many types are strictly prohibited.",
+    ru: "Только некоторые виды мусора могут сбрасываться при соблюдении требований MARPOL. Большинство видов сброса строго запрещено."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What should you do if you observe pollution?",
+    ru: "Что вы должны сделать, если обнаружили загрязнение?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "I report it immediately to the Master, take action to minimize pollution and follow the Shipboard Oil Pollution Emergency Plan if applicable.",
+    ru: "Я немедленно сообщаю капитану, принимаю меры по уменьшению загрязнения и действую в соответствии с SOPEP, если это необходимо."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What is SOPEP?",
+    ru: "Что такое SOPEP?"
+},
+{
+    category: "14 · MARPOL",
+    eng: "SOPEP is the Shipboard Oil Pollution Emergency Plan. It provides procedures for responding to oil pollution incidents.",
+    ru: "SOPEP — это Судовой план действий при аварийном загрязнении нефтью. Он содержит порядок действий при разливе нефти."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "What is your responsibility regarding MARPOL?",
+    ru: "Какова ваша ответственность в отношении MARPOL?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "What safety equipment is available on board?",
+    ru: "Что входит в состав аварийно-спасательного оборудования на судне?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "The vessel is equipped with lifeboats, life rafts, lifejackets, lifebuoys, immersion suits, EPIRBs, SARTs and other emergency equipment.",
+    ru: "Судно оборудовано спасательными шлюпками, плотами, спасательными жилетами, кругами, гидрокостюмами, EPIRB, SART и другим аварийным оборудованием."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What is the purpose of a lifejacket?",
+    ru: "Каково назначение спасательного жилета?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "A lifejacket keeps a person afloat and helps maintain the correct position in the water.",
+    ru: "Спасательный жилет удерживает человека на плаву и помогает сохранять правильное положение в воде."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What is an immersion suit used for?",
+    ru: "Для чего используется гидрокостюм?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "An immersion suit protects a person from cold water and reduces the risk of hypothermia.",
+    ru: "Гидрокостюм защищает человека от холодной воды и снижает риск переохлаждения."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What is an EPIRB?",
+    ru: "Что такое EPIRB?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "An EPIRB is an Emergency Position Indicating Radio Beacon that automatically transmits a distress alert and the vessel's position.",
+    ru: "EPIRB — это аварийный радиобуй, который автоматически передает сигнал бедствия и координаты судна."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What is a SART?",
+    ru: "Что такое SART?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "A SART is a Search and Rescue Transponder that helps rescue units locate survivors.",
+    ru: "SART — это поисково-спасательный радиолокационный ответчик, который помогает спасателям обнаружить терпящих бедствие."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "How do you check safety equipment?",
+    ru: "Как вы проверяете аварийно-спасательное оборудование?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "I inspect the equipment regularly, verify expiry dates and ensure it is ready for immediate use.",
+    ru: "Я регулярно проверяю оборудование, сроки годности и убеждаюсь, что оно готово к немедленному использованию."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What would you do if you found defective safety equipment?",
+    ru: "Что вы будете делать, если обнаружите неисправное аварийное оборудование?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "I report the defect immediately, label the equipment if necessary and arrange repair or replacement.",
+    ru: "Я немедленно сообщу о неисправности, при необходимости выведу оборудование из эксплуатации и организую ремонт или замену."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "Why are regular inspections important?",
+    ru: "Почему регулярные проверки важны?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "Regular inspections ensure that all safety equipment is operational and ready for emergencies.",
+    ru: "Регулярные проверки гарантируют, что всё аварийно-спасательное оборудование исправно и готово к использованию."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What documents are related to safety equipment?",
+    ru: "Какие документы относятся к аварийно-спасательному оборудованию?"
+},
+{
+    category: "15 · Safety Equipment",
+    eng: "Maintenance records, inspection reports, certificates and the planned maintenance system are related to safety equipment.",
+    ru: "К аварийно-спасательному оборудованию относятся записи о техническом обслуживании, отчёты о проверках, сертификаты и система планового обслуживания."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "What is your responsibility regarding safety equipment?",
+    ru: "Какова ваша ответственность в отношении аварийно-спасательного оборудования?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What are your emergency duties on board?",
+    ru: "Каковы ваши обязанности по тревоге на судне?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "My emergency duties are stated in the Muster List. I carry out my assigned responsibilities and report to my emergency station immediately.",
+    ru: "Мои обязанности по тревоге указаны в расписании по тревогам. Я немедленно прибываю на своё место сбора и выполняю свои обязанности."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What would you do if you discovered a fire?",
+    ru: "Что вы будете делать, если обнаружите пожар?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "I raise the alarm, inform the bridge, attempt to fight the fire if it is safe and follow the emergency procedures.",
+    ru: "Я подниму тревогу, сообщу на мостик, начну тушение пожара, если это безопасно, и буду действовать по аварийным процедурам."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What information should you report when reporting a fire?",
+    ru: "Какую информацию необходимо сообщить при обнаружении пожара?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "I report the location, type and extent of the fire, and whether there are any casualties.",
+    ru: "Я сообщаю место пожара, его характер, масштаб и наличие пострадавших."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What fire-fighting equipment is available on board?",
+    ru: "Какое противопожарное оборудование имеется на судне?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "The vessel is equipped with fire extinguishers, fire hoses, fire pumps, fixed fire-extinguishing systems and firefighters' outfits.",
+    ru: "Судно оборудовано огнетушителями, пожарными рукавами, пожарными насосами, стационарными системами пожаротушения и комплектами пожарного."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What is the purpose of fire drills?",
+    ru: "Какова цель пожарных учений?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "Fire drills help the crew practise emergency procedures and improve their response during real emergencies.",
+    ru: "Пожарные учения помогают экипажу отработать аварийные процедуры и повысить готовность к реальным чрезвычайным ситуациям."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "How often are fire drills conducted?",
+    ru: "Как часто проводятся пожарные учения?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "Fire drills are conducted regularly in accordance with SOLAS and the company's Safety Management System.",
+    ru: "Пожарные учения проводятся регулярно в соответствии с SOLAS и системой управления безопасностью компании."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What would you do if a crew member was injured during an emergency?",
+    ru: "Что вы будете делать, если член экипажа получил травму во время аварийной ситуации?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "I report the injury immediately, provide first aid if trained and arrange further medical assistance.",
+    ru: "Я немедленно сообщу о травме, окажу первую помощь, если обучен, и организую дальнейшую медицинскую помощь."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What is the Muster List?",
+    ru: "Что такое Muster List?"
+},
+{
+    category: "16 · Emergency Duties / Fire /Drills",
+    eng: "The Muster List shows each crew member's emergency duties, emergency station and assigned responsibilities.",
+    ru: "Расписание по тревогам определяет обязанности каждого члена экипажа, место сбора и распределение обязанностей."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What is your responsibility during an emergency drill?",
+    ru: "Какова ваша ответственность во время учебной тревоги?"
+},
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "I perform my assigned duties, supervise the crew if required and report any problems to the Master.",
+    ru: "Я выполняю свои обязанности, при необходимости руковожу экипажем и докладываю капитану о любых проблемах."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "What is the most important rule during an emergency?",
+    ru: "Какое самое важное правило во время аварийной ситуации?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if the radar failed?",
+    ru: "Что вы будете делать, если отказал радар?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would inform the Master immediately, use other available means of navigation and record the failure.",
+    ru: "Я немедленно сообщу капитану, буду использовать другие доступные средства навигации и зафиксирую отказ."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if the gyro compass failed?",
+    ru: "Что вы будете делать, если отказал гирокомпас?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would change to the magnetic compass, inform the Master and monitor the vessel's heading carefully.",
+    ru: "Я перейду на магнитный компас, сообщу капитану и буду внимательно контролировать курс судна."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if ECDIS failed?",
+    ru: "Что вы будете делать, если отказал ECDIS?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would switch to the backup ECDIS or paper charts, inform the Master and continue safe navigation.",
+    ru: "Я перейду на резервную ECDIS или бумажные карты, сообщу капитану и продолжу безопасное плавание."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if GPS failed?",
+    ru: "Что вы будете делать, если отказал GPS?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would use radar, visual observations, celestial or terrestrial navigation if available, and inform the Master.",
+    ru: "Я буду использовать радар, визуальное наблюдение, астрономические или береговые ориентиры, если это возможно, и сообщу капитану."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if the echo sounder failed?",
+    ru: "Что вы будете делать, если отказал эхолот?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would report the failure, increase navigational awareness and use all other available means.",
+    ru: "Я доложу об отказе, усилю контроль за навигационной обстановкой и буду использовать все остальные доступные средства."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What would you do if the steering gear alarm sounded?",
+    ru: "Что вы будете делать, если сработала сигнализация рулевого устройства?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I would check the steering response, inform the Master immediately and follow emergency steering procedures if necessary.",
+    ru: "Я проверю работу рулевого устройства, немедленно сообщу капитану и при необходимости перейду к аварийному управлению."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What should you do after any equipment failure?",
+    ru: "Что необходимо сделать после любого отказа оборудования?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I report the failure, assess its effect on navigation, make the required logbook entries and follow the Master's instructions.",
+    ru: "Я докладываю об отказе, оцениваю его влияние на безопасность плавания, делаю необходимые записи в журнале и выполняю указания капитана."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "Should you continue the voyage with defective equipment?",
+    ru: "Можно ли продолжать плавание с неисправным оборудованием?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "Only if it is safe, permitted by regulations and approved by the Master.",
+    ru: "Только если это безопасно, допускается правилами и одобрено капитаном."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "How do you report equipment defects?",
+    ru: "Как вы докладываете о неисправности оборудования?"
+},
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "I report the defect to the Master immediately and record it according to the Safety Management System.",
+    ru: "Я немедленно сообщаю капитану о неисправности и оформляю её в соответствии с системой управления безопасностью."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "What is the main principle when essential equipment fails?",
+    ru: "Каков главный принцип при отказе важного оборудования?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What should you do if you discover a defect on board?",
+    ru: "Что вы должны сделать, если обнаружили неисправность на судне?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "I report the defect to the Master immediately, assess its impact on safety and follow the company's reporting procedures.",
+    ru: "Я немедленно сообщаю капитану о неисправности, оцениваю её влияние на безопасность и действую в соответствии с процедурами компании."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What is the difference between a defect and a deficiency?",
+    ru: "В чем разница между defect и deficiency?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "A defect is a fault in equipment or machinery. A deficiency is any non-compliance with regulations, procedures or required standards.",
+    ru: "Defect — это неисправность оборудования или механизмов. Deficiency — это любое несоответствие требованиям, процедурам или стандартам."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "Why is defect reporting important?",
+    ru: "Почему важно сообщать о неисправностях?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "Timely reporting helps prevent accidents, maintain safety and ensure that repairs are carried out without delay.",
+    ru: "Своевременное сообщение помогает предотвратить аварии, поддерживать безопасность и обеспечить быстрый ремонт."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What information should a defect report contain?",
+    ru: "Какая информация должна содержаться в сообщении о неисправности?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "It should include the equipment name, location, description of the defect, its impact and any temporary measures taken.",
+    ru: "Оно должно содержать название оборудования, место, описание неисправности, её влияние и принятые временные меры."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What would you do if the defect affected navigational safety?",
+    ru: "Что вы будете делать, если неисправность влияет на безопасность судовождения?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "I inform the Master immediately, take appropriate precautions and follow the Safety Management System.",
+    ru: "Я немедленно сообщаю капитану, принимаю необходимые меры предосторожности и действую в соответствии с системой управления безопасностью."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "How are defects usually recorded?",
+    ru: "Как обычно регистрируются неисправности?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "Defects are recorded in the planned maintenance system, maintenance records or other company reporting systems.",
+    ru: "Неисправности регистрируются в системе планового технического обслуживания, журналах обслуживания или других системах компании."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What is a corrective action?",
+    ru: "Что такое corrective action?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "Corrective action is the action taken to eliminate a defect or correct a deficiency and restore safe operation.",
+    ru: "Corrective action — это действие по устранению неисправности или несоответствия и восстановлению безопасной эксплуатации."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What is a temporary repair?",
+    ru: "Что такое временный ремонт?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "A temporary repair allows equipment to operate safely until a permanent repair can be completed.",
+    ru: "Временный ремонт позволяет безопасно использовать оборудование до выполнения постоянного ремонта."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "Who should be informed about serious defects?",
+    ru: "Кого необходимо информировать о серьёзных неисправностях?"
+},
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "The Master should be informed immediately. The company should also be notified according to company procedures.",
+    ru: "Необходимо немедленно сообщить капитану. Компания также должна быть уведомлена в соответствии с её процедурами."
+},
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "What is your responsibility regarding defect reporting?",
+    ru: "Какова ваша ответственность в отношении сообщений о неисправностях?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What is a Port State Control inspection?",
+    ru: "Что такое инспекция Port State Control?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "A Port State Control inspection is carried out by the port authorities to verify that the vessel complies with international regulations.",
+    ru: "Инспекция Port State Control проводится портовыми властями для проверки соответствия судна международным требованиям."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "How do you prepare for a PSC inspection?",
+    ru: "Как вы готовитесь к инспекции PSC?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "I ensure that certificates, documents, safety equipment and navigational equipment are ready for inspection.",
+    ru: "Я убеждаюсь, что сертификаты, документы, спасательное оборудование и навигационные приборы готовы к проверке."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What documents should be available?",
+    ru: "Какие документы должны быть готовы?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "All statutory certificates, logbooks, manuals, checklists and records required by international conventions.",
+    ru: "Все обязательные сертификаты, журналы, руководства, чек-листы и записи, предусмотренные международными конвенциями."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What should you check on the bridge before inspection?",
+    ru: "Что необходимо проверить на мостике перед инспекцией?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "I check that all navigational equipment is operational, charts are updated and logbooks are completed correctly.",
+    ru: "Я проверяю, что навигационное оборудование исправно, карты обновлены, а журналы заполнены правильно."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What safety equipment is commonly inspected?",
+    ru: "Какое аварийно-спасательное оборудование обычно проверяют?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "Inspectors often check lifeboats, life rafts, lifejackets, fire-fighting equipment, emergency lighting and alarms.",
+    ru: "Инспекторы часто проверяют шлюпки, спасательные плоты, спасательные жилеты, противопожарное оборудование, аварийное освещение и сигнализацию."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "How should you behave during a PSC inspection?",
+    ru: "Как следует вести себя во время инспекции PSC?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "I remain calm, answer questions honestly, provide documents promptly and fully cooperate with the inspector.",
+    ru: "Я сохраняю спокойствие, честно отвечаю на вопросы, быстро предоставляю документы и полностью сотрудничаю с инспектором."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What would you do if an inspector found a deficiency?",
+    ru: "Что вы будете делать, если инспектор обнаружил замечание?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "I inform the Master immediately, record the deficiency and take corrective action as soon as possible.",
+    ru: "Я немедленно сообщаю капитану, фиксирую замечание и как можно быстрее принимаю корректирующие меры."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What is a deficiency?",
+    ru: "Что такое deficiency?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "A deficiency is any condition that does not comply with international regulations or company procedures.",
+    ru: "Deficiency — это любое несоответствие международным требованиям или процедурам компании."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "Why are checklists important before inspection?",
+    ru: "Почему чек-листы важны перед инспекцией?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "They help ensure that all equipment, documents and procedures are checked systematically before the inspection.",
+    ru: "Они помогают систематически проверить оборудование, документы и процедуры до начала инспекции."
+},
+
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "What is your responsibility during a PSC inspection?",
+    ru: "Какова ваша ответственность во время инспекции PSC?"
+},
+{
+    category: "19 · Inspection Preparation (PSC)",
+    eng: "I assist the Master, provide accurate information, demonstrate equipment if required and help ensure a successful inspection.",
+    ru: "Я помогаю капитану, предоставляю точную информацию, демонстрирую оборудование при необходимости и содействую успешному прохождению инспекции."
+},
+
+
+{
+    category: "18 · Defect / Deficiency Reporting",
+    eng: "My responsibility is to identify defects promptly, report them accurately, take immediate safety measures and support corrective actions.",
+    ru: "Моя обязанность — своевременно выявлять неисправности, точно сообщать о них, принимать необходимые меры безопасности и содействовать их устранению."
+},
+
+{
+    category: "17 · Bridge Equipment Failure",
+    eng: "Maintain the safety of navigation, use alternative equipment, call the Master and take timely action.",
+    ru: "Обеспечить безопасность плавания, использовать резервные средства, вызвать капитана и своевременно принять необходимые меры."
+},
+
+{
+    category: "16 · Emergency Duties / Fire / Drills",
+    eng: "Remain calm, follow the emergency procedures, communicate clearly and always put safety first.",
+    ru: "Сохранять спокойствие, выполнять аварийные процедуры, поддерживать чёткую связь и всегда ставить безопасность на первое место."
+},
+
+{
+    category: "15 · Safety Equipment",
+    eng: "I ensure the equipment is maintained, inspected, ready for use and reported if any defects are found.",
+    ru: "Я обеспечиваю исправность оборудования, его проверки, готовность к использованию и своевременно докладываю о любых неисправностях."
+},
+
+{
+    category: "14 · MARPOL",
+    eng: "I comply with MARPOL requirements, prevent pollution, maintain accurate records and report any pollution immediately.",
+    ru: "Я соблюдаю требования MARPOL, предотвращаю загрязнение, веду точные записи и немедленно сообщаю о любых случаях загрязнения."
+},
+
+
+
+{
+    category: "12 · Cargo Operations",
+    eng: "After completion, I check the cargo condition, secure the cargo spaces, complete the required records and report to the Chief Officer.",
+    ru: "После завершения я проверяю состояние груза, закрываю и обеспечиваю безопасность грузовых помещений, оформляю необходимые записи и докладываю старшему помощнику."
+},
+
+{
+    category: "11 · Mooring Operations",
+    eng: "I make sure all lines are secured, equipment is in good condition, the deck is tidy and I report completion to the bridge.",
+    ru: "Я убеждаюсь, что все швартовы закреплены, оборудование исправно, палуба приведена в порядок, и докладываю на мостик о завершении операции."
+},
+
+{
+    category: "10 · Anchoring Operations",
+    eng: "I ensure the anchoring operation is safe, supervise the crew, maintain communication with the bridge and report any problems immediately.",
+    ru: "Я обеспечиваю безопасное проведение постановки на якорь, руковожу экипажем, поддерживаю связь с мостиком и немедленно докладываю о любых проблемах."
+},
+
+{
+    category: "09 · Pilotage / Arrival Preparation",
+    eng: "I maintain a proper lookout, monitor the pilot's actions, verify the vessel's position and support the Master throughout the pilotage.",
+    ru: "Я веду надлежащее наблюдение, контролирую действия лоцмана, проверяю место судна и оказываю помощь капитану на протяжении всей проводки."
+},
+
+{
+    category: "08 · ECDIS / Chart Correction",
+    eng: "I ensure that ECDIS is used correctly, charts are updated, alarms are monitored and navigation is carried out safely.",
+    ru: "Я обеспечиваю правильное использование ECDIS, актуальность карт, контроль сигнализации и безопасное судовождение."
+},
+
+{
+    category: "07 · Passage Planning",
+    eng: "It helps ensure safe navigation, reduces navigational risks and complies with SOLAS and company procedures.",
+    ru: "Оно обеспечивает безопасное судовождение, снижает навигационные риски и соответствует требованиям SOLAS и процедурам компании."
+},
+
+{
+    category: "06 · When to Call the Master",
+    eng: "Whenever the safety of the vessel, crew or cargo may be affected, I call the Master immediately.",
+    ru: "Всякий раз, когда безопасность судна, экипажа или груза может быть под угрозой, я немедленно вызываю капитана."
+},
+
+{
+    category: "05 · Collision Avoidance / Restricted Visibility",
+    eng: "The main principle is to detect the risk early, make positive and timely action and comply with COLREG at all times.",
+    ru: "Главный принцип — своевременно обнаружить риск, принять чёткие и своевременные меры и всегда соблюдать МППСС."
+},
+
+{
+    category: "04 · Bridge Resource Management (BRM)",
+    eng: "My responsibility is to maintain a proper lookout, communicate effectively, monitor the navigation continuously and contribute to safe decision-making.",
+    ru: "Моя обязанность — вести надлежащее наблюдение, эффективно взаимодействовать с командой, постоянно контролировать навигацию и участвовать в безопасном принятии решений."
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What would you do if a crew member became seriously ill?",
+    ru: "Что вы будете делать, если член экипажа серьёзно заболел?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "I would inform the Master immediately, assess the situation, provide first aid if trained and arrange medical assistance.",
+    ru: "Я немедленно сообщу капитану, оценю ситуацию, окажу первую помощь, если обучен, и организую медицинскую помощь."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "Who is responsible for medical care on board?",
+    ru: "Кто отвечает за медицинскую помощь на судне?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "The Master is responsible for medical care on board, assisted by designated officers and trained crew members.",
+    ru: "Капитан отвечает за медицинскую помощь на судне при содействии назначенных помощников и обученных членов экипажа."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What information should you provide when requesting medical advice?",
+    ru: "Какую информацию необходимо сообщить при запросе медицинской консультации?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "I provide the patient's age, symptoms, vital signs, medical history, treatment given and any changes in condition.",
+    ru: "Я сообщаю возраст пациента, симптомы, жизненные показатели, историю болезни, оказанную помощь и любые изменения состояния."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What is first aid?",
+    ru: "Что такое первая помощь?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "First aid is the immediate care given to an injured or ill person before professional medical treatment is available.",
+    ru: "Первая помощь — это неотложная помощь пострадавшему или заболевшему до получения профессиональной медицинской помощи."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What medical equipment is available on board?",
+    ru: "Какое медицинское оборудование имеется на судне?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "The vessel carries a medical chest, first aid kits, stretcher, oxygen equipment and other medical supplies as required.",
+    ru: "На судне имеются судовая аптечка, комплекты первой помощи, носилки, кислородное оборудование и другие медицинские средства."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "When should radio medical advice be requested?",
+    ru: "Когда следует запрашивать медицинскую консультацию по радио?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "Radio medical advice should be requested whenever a serious illness or injury requires professional medical guidance.",
+    ru: "Радиомедицинскую консультацию следует запрашивать при серьёзной болезни или травме, требующей профессиональной помощи."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What would you do in case of an unconscious person?",
+    ru: "Что вы будете делать, если человек без сознания?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "I ensure the scene is safe, check breathing and pulse, provide first aid if trained and call for immediate assistance.",
+    ru: "Я убеждаюсь, что место безопасно, проверяю дыхание и пульс, оказываю первую помощь, если обучен, и немедленно вызываю помощь."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "Why are medical records important?",
+    ru: "Почему медицинские записи важны?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "They provide accurate information about the patient's condition, treatment and follow-up care.",
+    ru: "Они содержат точную информацию о состоянии пациента, оказанной помощи и дальнейшем лечении."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What is your responsibility during a medical emergency?",
+    ru: "Какова ваша ответственность при медицинской аварийной ситуации?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "I remain calm, follow company procedures, assist the Master and provide support until professional advice is received.",
+    ru: "Я сохраняю спокойствие, выполняю процедуры компании, помогаю капитану и оказываю необходимую помощь до получения профессиональных рекомендаций."
+},
+
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "What is the most important rule during a medical emergency?",
+    ru: "Какое самое важное правило при медицинской аварийной ситуации?"
+},
+{
+    category: "20 · Medical Assistance Procedure",
+    eng: "Protect life, act quickly, communicate clearly and follow established medical procedures.",
+    ru: "Сохранять жизнь, действовать быстро, поддерживать чёткую связь и соблюдать установленные медицинские процедуры."
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is the Safety Management System (SMS)?",
+    ru: "Что такое Safety Management System (SMS)?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "The Safety Management System is a documented system that helps ensure the safe operation of the vessel and protection of the environment.",
+    ru: "Система управления безопасностью — это документированная система, обеспечивающая безопасную эксплуатацию судна и защиту окружающей среды."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "Why is SMS important?",
+    ru: "Почему SMS важна?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "SMS provides clear procedures for safe operations, emergency response and compliance with international regulations.",
+    ru: "SMS устанавливает чёткие процедуры безопасной работы, действий в аварийных ситуациях и соблюдения международных требований."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "Who must follow the SMS?",
+    ru: "Кто должен соблюдать SMS?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "Every crew member on board must follow the Safety Management System and company procedures.",
+    ru: "Каждый член экипажа обязан соблюдать требования SMS и процедуры компании."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What should you do if you cannot follow an SMS procedure?",
+    ru: "Что делать, если невозможно выполнить процедуру SMS?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "I report the situation to the Master, assess the risk and follow the company's reporting procedures.",
+    ru: "Я сообщаю капитану, оцениваю риск и действую в соответствии с процедурами компании."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is a risk assessment?",
+    ru: "Что такое оценка риска?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "A risk assessment identifies hazards, evaluates risks and defines control measures before work begins.",
+    ru: "Оценка риска выявляет опасности, оценивает риски и определяет меры контроля до начала работы."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is a toolbox meeting?",
+    ru: "Что такое toolbox meeting?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "A toolbox meeting is a short safety briefing held before work to discuss hazards, responsibilities and control measures.",
+    ru: "Toolbox meeting — это короткий инструктаж перед работой, на котором обсуждаются опасности, обязанности и меры безопасности."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is a Permit to Work?",
+    ru: "Что такое Permit to Work?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "A Permit to Work is a formal authorization for hazardous work under specified safety conditions.",
+    ru: "Permit to Work — это официальное разрешение на выполнение опасных работ при соблюдении установленных мер безопасности."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What should you do if you notice an unsafe condition?",
+    ru: "Что делать, если вы обнаружили небезопасное состояние?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "I stop the unsafe activity if necessary, report it immediately and take appropriate safety measures.",
+    ru: "При необходимости я останавливаю небезопасную работу, немедленно сообщаю о ситуации и принимаю необходимые меры безопасности."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is your responsibility under the SMS?",
+    ru: "Какова ваша ответственность в рамках SMS?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "I follow company procedures, report hazards and defects, participate in drills and promote a strong safety culture.",
+    ru: "Я соблюдаю процедуры компании, сообщаю об опасностях и неисправностях, участвую в учениях и поддерживаю культуру безопасности."
+},
+
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "What is the main objective of the SMS?",
+    ru: "Какова главная цель SMS?"
+},
+{
+    category: "21 · Safety Management System (SMS)",
+    eng: "The main objective of the SMS is to ensure safety at sea, prevent injury and pollution, and achieve continuous improvement.",
+    ru: "Главная цель SMS — обеспечить безопасность на море, предотвращать травмы и загрязнение окружающей среды, а также постоянно совершенствовать систему."
+}
+];
+
+let marks = loadMarks();
+let current = 0;
+let answerVisible = false;
+let direction = "normal";
+let studyType = "cards";
+
+const els = {
+    html: document.documentElement,
+    cardNav: document.getElementById("cardNav"),
+    sectionNav: document.getElementById("sectionNav"),
+    sectionToggle: document.getElementById("sectionToggle"),
+    sectionCurrent: document.getElementById("sectionCurrent"),
+    category: document.getElementById("category"),
+    directionText: document.getElementById("directionText"),
+    frontText: document.getElementById("frontText"),
+    backText: document.getElementById("backText"),
+    noteText: document.getElementById("noteText"),
+    answerBox: document.getElementById("answerBox"),
+    showBtn: document.getElementById("showBtn"),
+    nextBtn: document.getElementById("nextBtn"),
+    positionText: document.getElementById("positionText"),
+    markText: document.getElementById("markText"),
+    modeNormal: document.getElementById("modeNormal"),
+    modeReverse: document.getElementById("modeReverse"),
+    studyCards: document.getElementById("studyCards"),
+    studyTyping: document.getElementById("studyTyping"),
+    typingBox: document.getElementById("typingBox"),
+    typedAnswer: document.getElementById("typedAnswer"),
+    typingResult: document.getElementById("typingResult"),
+    resetMarks: document.getElementById("resetMarks"),
+    themeToggle: document.getElementById("themeToggle")
+};
+
+const sections = buildSections(cards);
+let currentSection = 0;
+let sectionMenuOpen = false;
+
+function buildSections(cards) {
+    const map = new Map();
+
+    cards.forEach((card, index) => {
+        const category = getCardCategory(card);
+        if (!map.has(category)) {
+            map.set(category, {
+                title: category,
+                indices: []
+            });
+        }
+        map.get(category).indices.push(index);
+    });
+
+    return Array.from(map.values());
+}
+
+function getSectionByCardIndex(cardIndex) {
+    return sections.findIndex(section => section.indices.includes(cardIndex));
+}
+
+function getCurrentSection() {
+    return sections[currentSection];
+}
+
+function openSectionMenu() {
+    sectionMenuOpen = true;
+    els.sectionNav.hidden = false;
+    els.sectionToggle.setAttribute("aria-expanded", "true");
+}
+
+function closeSectionMenu() {
+    sectionMenuOpen = false;
+    els.sectionNav.hidden = true;
+    els.sectionToggle.setAttribute("aria-expanded", "false");
+}
+
+function toggleSectionMenu() {
+    if (sectionMenuOpen) {
+        closeSectionMenu();
+    } else {
+        openSectionMenu();
+    }
+}
+
+
+
+function emptyMarks() {
+    return cards.map(() => "none");
+}
+
+function loadMarks() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (Array.isArray(parsed)) {
+            return cards.map((_, index) => {
+                const mark = parsed[index];
+                return ["red", "green", "none"].includes(mark) ? mark : "none";
+            });
+        }
+    } catch (error) {
+    }
+
+    return emptyMarks();
+}
+
+function saveMarks() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(marks));
+    } catch (error) {
+    }
+}
+
+function getCardEnglish(card) {
+    return Array.isArray(card) ? card[0] : card.eng;
+}
+
+function getCardRussian(card) {
+    return Array.isArray(card) ? card[1] : card.ru;
+}
+
+function getCardCategory(card) {
+    return Array.isArray(card) ? "Minimum for Review" : (card.category || "Minimum for Review");
+}
+
+function getFrontBack(card) {
+    const activeDirection = direction;
+    const english = getCardEnglish(card);
+    const russian = getCardRussian(card);
+    return activeDirection === "reverse"
+        ? { front: russian, back: english, label: "RU → EN", prompt: "английский" }
+        : { front: english, back: russian, label: "EN → RU", prompt: "перевод" };
+}
+
+function markLabel(mark) {
+    if (mark === "red") return "Не знаю";
+    if (mark === "green") return "Знаю";
+    return "Без метки";
+}
+
+function render() {
+    const card = cards[current];
+    const pair = getFrontBack(card);
+
+    els.category.textContent = getCardCategory(card);
+    els.directionText.textContent = pair.label;
+    els.frontText.textContent = pair.front;
+    els.backText.textContent = pair.back;
+    els.noteText.textContent = card.note || "";
+    els.answerBox.classList.toggle("visible", answerVisible);
+    els.showBtn.textContent = answerVisible ? "Скрыть ответ" : `Показать ${pair.prompt}`;
+    els.positionText.textContent = `${current + 1} / ${cards.length}`;
+    els.markText.textContent = markLabel(marks[current]);
+
+    const currentSectionData = getCurrentSection();
+    els.sectionCurrent.textContent = currentSectionData
+        ? currentSectionData.title
+        : "Раздел";
+
+    els.typingBox.classList.toggle("active", studyType === "typing");
+    els.typedAnswer.placeholder = pair.prompt === "перевод" ? "Введите русский перевод" : "Введите английскую фразу";
+
+    if (!answerVisible) {
+        els.typingResult.textContent = "";
+    }
+
+    const section = getCurrentSection();
+    const sectionIndices = section ? section.indices : [];
+
+    document.querySelectorAll(".nav-btn").forEach((button, localIndex) => {
+        const cardIndex = sectionIndices[localIndex];
+        const isActive = cardIndex === current;
+        button.classList.toggle("active", isActive);
+        button.classList.toggle("mark-red", marks[cardIndex] === "red");
+        button.classList.toggle("mark-green", marks[cardIndex] === "green");
+        button.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+
+    saveMarks();
+}
+
+function renderSections() {
+    els.sectionNav.innerHTML = "";
+
+    sections.forEach((section, index) => {
+        const button = document.createElement("button");
+        button.className = "section-btn";
+        button.type = "button";
+        button.textContent = section.title;
+        button.classList.toggle("active", index === currentSection);
+        button.addEventListener("click", () => goToSection(index));
+        els.sectionNav.appendChild(button);
+    });
+}
+
+function renderNavigation() {
+    els.cardNav.innerHTML = "";
+
+    const section = getCurrentSection();
+    if (!section) return;
+
+    section.indices.forEach((cardIndex, localIndex) => {
+        const card = cards[cardIndex];
+        const button = document.createElement("button");
+        button.className = "nav-btn";
+        button.type = "button";
+
+        const pairNumber = Math.floor(localIndex / 2) + 1;
+        const isQuestion = localIndex % 2 === 0;
+
+        button.textContent = `${isQuestion ? "Q" : "A"}${pairNumber}`;
+        button.setAttribute(
+            "aria-label",
+            `${card.category} ${isQuestion ? "Question" : "Answer"}: ${getCardEnglish(card)}`
+        );
+        button.addEventListener("click", () => goTo(cardIndex));
+        els.cardNav.appendChild(button);
+    });
+}
+
+function goToSection(sectionIndex) {
+    currentSection = sectionIndex;
+    closeSectionMenu();
+    const section = getCurrentSection();
+    if (!section || !section.indices.length) return;
+    goTo(section.indices[0]);
+}
+
+function goTo(index) {
+    current = (index + cards.length) % cards.length;
+    answerVisible = false;
+    els.typedAnswer.value = "";
+
+    const sectionIndex = getSectionByCardIndex(current);
+    if (sectionIndex !== -1) {
+        currentSection = sectionIndex;
+    }
+
+    renderSections();
+    renderNavigation();
+    render();
+}
+
+function move(step) {
+    const section = getCurrentSection();
+    if (!section || !section.indices.length) return;
+
+    const position = section.indices.indexOf(current);
+    const nextPosition = position === -1
+        ? 0
+        : (position + step + section.indices.length) % section.indices.length;
+
+    goTo(section.indices[nextPosition]);
+}
+
+function showAnswer() {
+    answerVisible = !answerVisible;
+    if (answerVisible && studyType === "typing") {
+        checkTypedAnswer();
+    }
+    render();
+}
+
+function normalizeAnswer(value) {
+    return value
+        .toLowerCase()
+        .replace(/[.,!?;:()[\]"']/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+function similarity(a, b) {
+    const left = normalizeAnswer(a);
+    const right = normalizeAnswer(b);
+    if (!left || !right) return 0;
+    if (left === right) return 1;
+
+    const leftWords = new Set(left.split(" "));
+    const rightWords = new Set(right.split(" "));
+    const common = [...leftWords].filter(word => rightWords.has(word)).length;
+    return common / Math.max(leftWords.size, rightWords.size);
+}
+
+function checkTypedAnswer() {
+    const expected = getFrontBack(cards[current]).back;
+    const value = els.typedAnswer.value;
+    const score = similarity(value, expected);
+
+    if (!value.trim()) {
+        els.typingResult.textContent = "";
+    } else if (score > 0.82) {
+        els.typingResult.textContent = "Очень близко.";
+    } else if (score > 0.45) {
+        els.typingResult.textContent = "Частично совпадает, проверьте ключевые слова.";
+    } else {
+        els.typingResult.textContent = "Пока далеко от ответа.";
+    }
+}
+
+function setDirection(next) {
+    direction = next;
+    answerVisible = false;
+    els.modeNormal.classList.toggle("active", next === "normal");
+    els.modeReverse.classList.toggle("active", next === "reverse");
+    render();
+}
+
+function setStudyType(next) {
+    studyType = next;
+    answerVisible = false;
+    els.studyCards.classList.toggle("active", next === "cards");
+    els.studyTyping.classList.toggle("active", next === "typing");
+    els.typedAnswer.value = "";
+    render();
+}
+
+function setMark(mark) {
+    marks[current] = mark;
+    saveMarks();
+    render();
+    move(1);
+}
+
+function resetMarks() {
+    const confirmed = confirm("Сбросить все цветные метки?");
+    if (!confirmed) return;
+
+    marks = emptyMarks();
+    saveMarks();
+    render();
+}
+
+function initTheme() {
+    let savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem(THEME_KEY);
+    } catch (error) {
+    }
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    els.html.setAttribute("data-theme", savedTheme || (media.matches ? "dark" : "light"));
+
+    els.themeToggle.addEventListener("click", () => {
+        const currentTheme = els.html.getAttribute("data-theme");
+        const nextTheme = currentTheme === "dark" ? "light" : "dark";
+        try {
+            localStorage.setItem(THEME_KEY, nextTheme);
+        } catch (error) {
+        }
+        els.html.setAttribute("data-theme", nextTheme);
+    });
+}
+
+els.showBtn.addEventListener("click", showAnswer);
+els.nextBtn.addEventListener("click", () => move(1));
+els.modeNormal.addEventListener("click", () => setDirection("normal"));
+els.modeReverse.addEventListener("click", () => setDirection("reverse"));
+els.studyCards.addEventListener("click", () => setStudyType("cards"));
+els.studyTyping.addEventListener("click", () => setStudyType("typing"));
+els.typedAnswer.addEventListener("input", checkTypedAnswer);
+els.typedAnswer.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        answerVisible ? setMark("green") : showAnswer();
+    }
+});
+els.resetMarks.addEventListener("click", resetMarks);
+els.sectionToggle.addEventListener("click", toggleSectionMenu);
+
+document.querySelectorAll("[data-mark]").forEach(button => {
+    button.addEventListener("click", () => setMark(button.dataset.mark));
+});
+
+document.addEventListener("keydown", event => {
+    const target = event.target;
+    const isTyping = target instanceof HTMLInputElement;
+    if (isTyping) return;
+
+    if (event.key === " ") {
+        event.preventDefault();
+        showAnswer();
+    } else if (event.key === "ArrowRight") {
+        move(1);
+    } else if (event.key === "1") {
+        setMark("red");
+    } else if (event.key === "2") {
+        setMark("green");
+    }
+});
+
+document.addEventListener("click", event => {
+    if (!sectionMenuOpen) return;
+    const picker = document.querySelector(".section-picker");
+    if (picker && !picker.contains(event.target)) {
+        closeSectionMenu();
+    }
+});
+
+initTheme();
+renderSections();
+renderNavigation();
+goTo(0);
+</script>
+</body>
+</html>
